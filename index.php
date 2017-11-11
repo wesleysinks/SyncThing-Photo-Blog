@@ -19,6 +19,10 @@ $author="Wesley Sinks"
       <h1 id="siteTitle"><?php echo $title ?></h1>
       <p id="siteDesc"><?php echo $description ?></p>
     </header>
-
+    <php
+      ### for each photo file in posts
+        ### if matching text file
+          ### print image and text to page
+    ?>
   </body>
 </html>
