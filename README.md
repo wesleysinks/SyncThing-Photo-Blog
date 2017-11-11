@@ -1,9 +1,9 @@
-## Syncthing Photo Blog
+# Syncthing Photo Blog
 
-# Goal: 
+## Goal: 
 Pull photos and txt or md files with the same name to create continuous scrolling posts, sync to remote machine(s) with Syncthing from specified directory.
 
-# Planned Features:
+## Planned Features:
 
 * Generate single post URL/slug
 * Offer share links per post
