@@ -20,8 +20,8 @@ $author="Wesley Sinks"
     </header>
     <?php
       // arrays for photos and description files
-      $photos = glob('posts/*.{gif,jpg,png}', GLOB_BRACE);
-      $descriptions = glob('posts/*.txt', GLOB_BRACE);
+      $photos = glob('posts/*.{jpg,png,gif}', GLOB_BRACE);
+      $descriptions = glob('posts/*.txt');
 
       // sort photos newest first
       usort($photos, function($a, $b) {
