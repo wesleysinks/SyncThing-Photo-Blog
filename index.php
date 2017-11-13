@@ -61,7 +61,7 @@ $current = basename($_SERVER[REQUEST_URI]);
         }
         ?>
         <article id="<?php echo $articleName ?>">
-          <img src="<?php echo '/posts/' . $p ?>" alt="<?php echo $articleName ?>" height="1000px">
+          <img src="<?php echo '/posts/' . $p ?>" alt="<?php echo $articleName ?>" height="100%">
           <h2><?php echo $articleName . " | " . date("m.d.y", filemtime($p)) ?></h2>
           <?php foreach (file($d) as $line):
             if ($line != "\n") { ?>
