@@ -19,23 +19,35 @@ $author="Wesley Sinks"
       <p id="siteDesc"><?php echo $siteDescription ?></p>
     </header>
     <?php
-      ### for each photo file in posts
-      $photos = glob('posts/*.{jpg, png, gif}', GLOB_BRACE);
-      $descriptions = glob('posts/*.{txt, md}', GLOB_BRACE);
+      // arrays for photos and description files
+      $photos = glob('posts/*.{gif,jpg,png}', GLOB_BRACE);
+      $descriptions = glob('posts/*.txt', GLOB_BRACE);
+
+      // sort photos newest first
+      usort($photos, function($a, $b) {
+        return filemtime($a) < filemtime($b);
+      });
+
+      //strip file extensions
       function extensionStrip($f)
       {
         $f_info = pathinfo($f);
         $f_name =  basename($f,'.'.$f_info['extension']);
         return $f_name;
       }
+
+      // for each photo file in posts
       foreach($photos as $p) {
-        ### if matching text file
+        // if matching text file
         foreach($descriptions as $d) {
-          if(extensionStrip($p) == extensionStrip($d)) {
-            ### print image and text to page
+          if(extensionStrip($p) == extensionStrip($d) && pathinfo($d)['extension'] == 'txt') {
+            // print image and text to page
             ?>
-            <img src="<?php echo $p ?>" alt="<?php extensionStrip($p) ?>">
-            <p><?php echo file_get_contents($d) ?></p>
+            <article>
+              <img src="<?php echo $p ?>" alt="<?php extensionStrip($p) ?>" height="400px">
+              <h2><?php echo date("m.d.y", filemtime($p)) . " | " . extensionStrip($p) ?></h2>
+              <p><?php echo file_get_contents($d) ?></p>
+            </article>
             <?php
           }
         }
