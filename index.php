@@ -1,7 +1,9 @@
 <?php
 $title="Syncthing Photo Blog";
 $siteDescription="Proof of concept for a simple Syncthing powered photo blog";
-$author="Wesley Sinks"
+$author="Wesley Sinks";
+$current = basename($_SERVER[REQUEST_URI]);
+
 ?>
 
 <!doctype html>
@@ -15,18 +17,13 @@ $author="Wesley Sinks"
   </head>
   <body>
     <header id="mainHeader">
-      <h1 id="siteTitle"><?php echo $title ?></h1>
+      <h1 id="siteTitle"><a href="/"><?php echo $title ?></a></h1>
       <p id="siteDesc"><?php echo $siteDescription ?></p>
     </header>
     <?php
       // arrays for photos and description files
-<<<<<<< HEAD
       $photos = glob('posts/*.{jpg,png,gif}', GLOB_BRACE);
       $descriptions = glob('posts/*.txt');
-=======
-      $photos = glob('posts/*.{jpg, png, gif}', GLOB_BRACE);
-      $descriptions = glob('posts/*.{txt}', GLOB_BRACE);
->>>>>>> ce2a36fdd04c9f73fab13a940c26f02f40baa803
 
       // sort photos newest first
       usort($photos, function($a, $b) {
@@ -41,19 +38,56 @@ $author="Wesley Sinks"
         return $f_name;
       }
 
-      // for each photo file in posts
-      foreach($photos as $p) {
-        // if matching text file
-        foreach($descriptions as $d) {
-          if(extensionStrip($p) == extensionStrip($d) && pathinfo($d)['extension'] == 'txt') {
-            // print image and text to page
-            ?>
-            <article>
-              <img src="<?php echo $p ?>" alt="<?php extensionStrip($p) ?>" height="400px">
-              <h2><?php echo date("m.d.y", filemtime($p)) . " | " . extensionStrip($p) ?></h2>
-              <p><?php echo file_get_contents($d) ?></p>
-            </article>
-            <?php
+      function nameArray($a)
+      {
+        $returnArray = [];
+        foreach ($a as $i) {
+          array_push($returnArray, extensionStrip($i));
+        }
+        return $returnArray;
+      }
+
+      $articleName = str_replace('-', ' ', $current);
+      if(array_search($articleName, nameArray($photos)) !== flase && array_search($articleName, nameArray($descriptions)) !== false){
+        $articleName = str_replace('-', ' ', $current);
+        // Display single here.
+        $d = 'posts/' . $articleName . '.txt';
+        if(glob('posts/' . $articleName . '.jpg')){
+          $p = $articleName . '.jpg';
+        } elseif (glob('posts/' . $articleName . '.png')) {
+          $p = $articleName . '.png';
+        } elseif (glob('posts/' . $articleName . '.gif')) {
+          $p = $articleName . '.gif';
+        }
+        ?>
+        <article id="<?php echo $articleName ?>">
+          <img src="<?php echo '/posts/' . $p ?>" alt="<?php echo $articleName ?>" height="1000px">
+          <h2><?php echo $articleName . " | " . date("m.d.y", filemtime($p)) ?></h2>
+          <?php foreach (file($d) as $line):
+            if ($line != "\n") { ?>
+            <p><?php echo trim($line, "\n") ?></p>
+          <?php } endforeach; ?>
+        </article>
+      <?php
+      } else {
+        // for each photo file in posts
+        foreach($photos as $p) {
+          // if matching text file
+          foreach($descriptions as $d) {
+            if(extensionStrip($p) == extensionStrip($d)) {
+              // print image and text to page
+              $articleName = extensionStrip($p);
+              ?>
+              <article id="<?php echo $articleName ?>">
+                <a href="<?php echo "/" . str_replace(' ', '-', $articleName) ?>"><img src="<?php echo $p ?>" alt="<?php echo $articleName ?>" height="400px"></a>
+                <h2><a href="<?php echo "/" . str_replace(' ', '-', $articleName) ?>"><?php echo $articleName . " | " . date("m.d.y", filemtime($p)) ?></a></h2>
+                <?php foreach (file($d) as $line):
+                  if ($line != "\n") { ?>
+                  <p><?php echo trim($line, "\n") ?></p>
+                <?php } endforeach; ?>
+              </article>
+              <?php
+            }
           }
         }
       }
