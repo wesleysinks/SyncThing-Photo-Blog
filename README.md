@@ -19,6 +19,7 @@ Pull photos and txt or md files with the same name to create continuous scrollin
 - [x] Create single post display and link logic
 - [ ] Add CSS to gallery for better UX
 - [ ] Break out functions and includes
+- [ ] Consider subdirectories as categories/authors
 - [ ] Deploy on remote server and test
 - [ ] Create wsle.me post about project
 - [ ] Consider next iteration using Google Drive REST API
