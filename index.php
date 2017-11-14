@@ -2,7 +2,7 @@
 $title="Syncthing Photo Blog";
 $siteDescription="Proof of concept for a simple Syncthing powered photo blog";
 $author="Wesley Sinks";
-$current = basename($_SERVER[REQUEST_URI]);
+$current = basename($_SERVER['REQUEST_URI']);
 
 ?>
 
@@ -15,6 +15,20 @@ $current = basename($_SERVER[REQUEST_URI]);
     <meta name="description" content="<?php echo $siteDescription ?>">
     <meta name="author" content="<?php echo $author ?>">
   </head>
+  <style>
+  html {
+    background: black;
+    color: #fee;
+  }
+  img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 90%;
+    margin: 20px auto;
+  }
+  </style>
   <body>
     <header id="mainHeader">
       <h1 id="siteTitle"><a href="/"><?php echo $title ?></a></h1>
@@ -48,7 +62,7 @@ $current = basename($_SERVER[REQUEST_URI]);
       }
 
       $articleName = str_replace('-', ' ', $current);
-      if(array_search($articleName, nameArray($photos)) !== flase && array_search($articleName, nameArray($descriptions)) !== false){
+      if(array_search($articleName, nameArray($photos)) !== false && array_search($articleName, nameArray($descriptions)) !== false){
         $articleName = str_replace('-', ' ', $current);
         // Display single here.
         $d = 'posts/' . $articleName . '.txt';
@@ -61,8 +75,8 @@ $current = basename($_SERVER[REQUEST_URI]);
         }
         ?>
         <article id="<?php echo $articleName ?>">
-          <img src="<?php echo '/posts/' . $p ?>" alt="<?php echo $articleName ?>" height="100%">
-          <h2><?php echo $articleName . " | " . date("m.d.y", filemtime($p)) ?></h2>
+          <img src="<?php echo '/posts/' . $p ?>" alt="<?php echo $articleName ?>" />
+          <h2><?php echo $articleName . " | " . date("m.d.y", filemtime('posts/' . $p)) ?></h2>
           <?php foreach (file($d) as $line):
             if ($line != "\n") { ?>
             <p><?php echo trim($line, "\n") ?></p>
@@ -79,7 +93,7 @@ $current = basename($_SERVER[REQUEST_URI]);
               $articleName = extensionStrip($p);
               ?>
               <article id="<?php echo $articleName ?>">
-                <a href="<?php echo "/" . str_replace(' ', '-', $articleName) ?>"><img src="<?php echo $p ?>" alt="<?php echo $articleName ?>" height="400px"></a>
+                <a href="<?php echo "/" . str_replace(' ', '-', $articleName) ?>"><img src="<?php echo $p ?>" alt="<?php echo $articleName ?>" /></a>
                 <h2><a href="<?php echo "/" . str_replace(' ', '-', $articleName) ?>"><?php echo $articleName . " | " . date("m.d.y", filemtime($p)) ?></a></h2>
                 <?php foreach (file($d) as $line):
                   if ($line != "\n") { ?>
